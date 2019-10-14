@@ -1,0 +1,11 @@
+.app-container{
+	
+}
+.app-container span{
+	position:fixed;
+	background-color: red;
+}
+.scoreBoard{
+	background-color:red;
+	position:fixed;
+}
