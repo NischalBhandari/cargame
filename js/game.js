@@ -1,9 +1,15 @@
 ;(function(){
 		var score=0;
+		var level=1;
 		var scoreBoard=document.getElementById('scoreCounter');
+		var levelBoard=document.getElementById('levelCounter');
 		setInterval(function(){
 			score+=1;
+			if(score%10==0){
+				level=level+1;
+			}
 			scoreBoard.innerHTML=score;
+			levelBoard.innerHTML=level;
 		},1000);
 function gameLoop(){
 	this.canvas=document.getElementById('canvas');
@@ -34,6 +40,9 @@ function gameLoop(){
 	that.array[i].upperCollide();
 	var stop=that.array[i].ballCollide(that.car);
 	if(!stop){
+		document.removeEventListener("keydown",keyDownHandler);
+		document.removeEventListener("keydown",keyRightHandler);
+		document.removeEventListener("keydown",keyLeftHandler);
 		that.array[i].stop();
 		setTimeout(function(){
 		document.location.reload();
@@ -78,7 +87,7 @@ function draw(gap){
 	
 	this.x=(this.width+(this.canvas.width/2));
 	this.y=(this.canvas.height-this.height)/2;
-	this.dx=-(this.canvas.width/8);
+	this.dx=-(this.canvas.width/4);
 	this.density=2;
 	this.volume=this.height*this.width;
 	this.mass=this.volume*this.density;
@@ -92,12 +101,16 @@ function draw(gap){
 		this.ctx.drawImage(this.carImage,0,0,40,70,this.x,this.y,this.width,this.height);
 		/*this.ctx.rect(this.x,this.y,this.width,this.height);*/
 		this.ctx.fill();
+		document.onclick=function(){
+			this.ctx.beginPath();
+			this.ctx.fillStyle='blue';
+			this.ctx.rect(this.x,this.y,30,30);
+			this.ctx.fill();
+		}
 		return this;
 	}
 
 	this.update=function(){
-/*		this.x+=this.dx;
-		this.y+=this.dy;*/
 		this.init();
 	}
 	this.moveUp=function(){
@@ -139,14 +152,7 @@ function road(){
 		this.ctx.fillStyle="black";
 		this.ctx.rect(i*this.width,0,this.width,this.canvas.height);
 		this.ctx.fill();
-		this.ctx.beginPath();
-		this.ctx.fillStyle="black";
-		this.ctx.rect(5,this.ypos,10,10);
-		this.ctx.fill();
-		this.ctx.beginPath();
-		this.ctx.fillStyle="green";
-		this.ctx.rect(this.canvas.width-20,this.ypos,10,10);
-		this.ctx.fill();
+
 		for (var j=0;j<30;j++){
 			this.ctx.beginPath();
 			this.ctx.fillStyle="white";
@@ -163,7 +169,7 @@ function road(){
 		}
 	}
 	this.move=function(){
-		this.ypos+=1;
+		this.ypos+=level*1;
 		if(this.ypos+700>this.canvas.height){
 			this.ypos=-this.canvas.height;
 		}
@@ -182,7 +188,7 @@ function walls(){
 	this.vehicleImage.src='./images/truck.png';
 
 	this.dx=0;
-	this.dy=4;
+	this.dy=2;
 	var that=this;
 
 	this.init=function(){
@@ -199,44 +205,30 @@ function walls(){
 		this.y+=this.dy;
 		this.init();
 	}
-	this.collide=function(){
-		var change=Math.random()<0.5?Math.floor(Math.random()*100):-Math.floor(Math.random()*100);
-		if(this.y+this.dy+this.wallHeight<0){
-			this.y= this.canvas.height-this.wallHeight;
-			this.wallHeight+=change;
-			if(this.wallHeight<0){
-				this.wallHeight=50;
-			}
-			this.y=this.canvas.height+this.wallHeight;
-			this.x=Math.floor(Math.random()*(this.canvas.width-this.wallWidth));
-		}
-		if(this.x+this.dx+this.wallWidth>this.canvas.width){
-			this.dx=-this.dx;
-	}
-}
-this.upperCollide=function(){
-	var change=Math.random()<0.5?Math.floor(Math.random()*100):-Math.floor(Math.random()*100);
-	if(this.y+this.dy+this.wallHeight>this.canvas.height){
-		this.y=-this.canvas.height;
-		this.wallHeight-=change;
-		console.log(this.wallHeight);
-			if(this.wallHeight<0||this.wallHeight>50){
-				this.wallHeight=50;
-			}
-			this.y=Math.floor(Math.random()*(0-this.canvas.height));
-			this.x=Math.floor(Math.random()*(this.canvas.width-this.wallWidth));
-		if(this.x+this.dx+this.wallWidth>this.canvas.width){
-			this.dx=-this.dx;
-	}
 
-	}
-}
+		this.upperCollide=function(){
+			var change=Math.random()<0.5?Math.floor(Math.random()*100):-Math.floor(Math.random()*100);
+			this.dy=level*2;
+			if(this.y+this.dy+this.wallHeight>this.canvas.height){
+				this.y=-this.canvas.height;
+				this.wallHeight-=change;
+					if(this.wallHeight<0||this.wallHeight>50){
+						this.wallHeight=50;
+					}
+					this.y=Math.floor(Math.random()*(0-this.canvas.height));
+					this.x=Math.floor(Math.random()*(this.canvas.width-this.wallWidth));
+				if(this.x+this.dx+this.wallWidth>this.canvas.width){
+					this.dx=-this.dx;
+			}
+
+			}
+		}
 
 	this.ballCollide=function(ball){
 		if(ball.x < this.x + this.wallWidth &&
-   ball.x + ball.width > this.x &&
-   ball.y < this.y + this.wallHeight &&
-   ball.y + ball.height > this.y){
+		   ball.x + ball.width > this.x &&
+		   ball.y < this.y + this.wallHeight &&
+		   ball.y + ball.height > this.y){
 				this.ctx.drawImage(this.vehicleImage,50,0,50,50,this.x,this.y,this.wallWidth,this.wallHeight);
 				return false;
 			}
@@ -253,6 +245,21 @@ this.upperCollide=function(){
 
 
 new gameLoop();
+var application=document.getElementById('app');
+
+var restartButton=document.getElementById('restart');
+restartButton.onclick=function(){
+	var canvas=document.getElementById('canvas');
+	application.removeChild(canvas);
+	var newCanvas=document.createElement('canvas');
+	newCanvas.width=1000;
+	newCanvas.height=600;
+	newCanvas.id='canvas';
+	application.appendChild(newCanvas);
+	score=0;
+	level=1;
+	new gameLoop();
+}
 
 
 
