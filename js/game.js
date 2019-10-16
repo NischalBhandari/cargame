@@ -31,7 +31,7 @@
 				that.levelBoard.innerHTML=that.level;
 			},1000);
 
-			for(var i=0;i<3;i++){
+			for(var i=0;i<2;i++){
 			this.obstacle= new walls(i).init();
 
 			this.array.push(this.obstacle);
@@ -52,10 +52,10 @@
 				that.myroad.move(that.level);
 				that.car.update();
 				that.car.collide();
-			for (var k=0;k<3;k++){
+			for (var k=0;k<2;k++){
 				that.ypos[k]=(k*400+100);
 			}
-			for(var i=0;i<3;i++){
+			for(var i=0;i<2;i++){
 
 			that.array[i].moveWall();
 			that.array[i].upperCollide(that.level,that.ypos[i]);
