@@ -1,5 +1,7 @@
 ;(function(){
 		function gameLoop(){
+			this.FPS=60;
+			this.FRAME_RATE=1000/this.FPS;
 			this.score=0;
 			this.level=1;
 			var that=this;
@@ -22,7 +24,7 @@
 			this.levelBoard=document.getElementById('levelCounter');
 			setInterval(function(){
 				/*that.score+=1;*/
-				if(that.score%10==0){
+				if(that.score%9==0){
 					that.level+=1;
 				}
 				that.scoreBoard.innerHTML=that.score;
@@ -35,9 +37,9 @@
 			this.array.push(this.obstacle);
 			}
 			
-			document.addEventListener("keydown",keyDownHandler,false);
-			document.addEventListener("keydown",keyUpHandler,false);
-			document.addEventListener("keyup",keyUpHandler,false);
+/*			document.addEventListener("keydown",keyDownHandler,false);*/
+/*			document.addEventListener("keydown",keyUpHandler,false);
+			document.addEventListener("keyup",keyUpHandler,false);*/
 			document.addEventListener("keydown",keyRightHandler,false);
 			document.addEventListener("keyup",keyRightUpHandler,false);
 			document.addEventListener("keydown",keyLeftHandler,false);
@@ -79,6 +81,10 @@
 				document.removeEventListener("keydown",keyDownHandler);
 				document.removeEventListener("keydown",keyRightHandler);
 				document.removeEventListener("keydown",keyLeftHandler);
+				document.removeEventListener("keyup",keyRightUpHandler);
+				document.removeEventListener("keyup",keyLeftUpHandler);
+				document.removeEventListener("keydown",keySpaceHandler);
+
 				that.array[i].stop();
 				setTimeout(function(){
 				document.location.reload();
@@ -96,7 +102,7 @@
 						}
 					}
 			}
-			},25);
+			},this.FRAME_RATE);
 
 			function keyDownHandler(e){
 				if(e.key=="Up"||e.key=="ArrowUp"){
@@ -104,11 +110,11 @@
 				}
 			}
 
-			function keyUpHandler(e){
+/*			function keyUpHandler(e){
 				if(e.key=="Down"||e.key=="ArrowDown"){
 					that.car.moveDown();
 				}
-			}
+			}*/
 			function keyRightHandler(e){
 				if(e.key=="Right"||e.key=="ArrowRight"||e.keyCode==68){
 					that.car.moveRight();
@@ -379,7 +385,7 @@
 var application=document.getElementById('app');
 startButton.onclick=function(){
 	var application=document.getElementById('app');
-	var startingButton=document.getElementById('startButton');
+	var startingButton=document.getElementById('startGame');
 	startingButton.style.display="none";
 	new gameLoop();
 }
