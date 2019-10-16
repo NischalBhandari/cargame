@@ -51,7 +51,7 @@
 				that.car.update();
 				that.car.collide();
 			for (var k=0;k<3;k++){
-				that.ypos[k]=(k*400+200);
+				that.ypos[k]=(k*400+100);
 			}
 			for(var i=0;i<3;i++){
 
@@ -96,7 +96,7 @@
 						}
 					}
 			}
-			},10);
+			},25);
 
 			function keyDownHandler(e){
 				if(e.key=="Up"||e.key=="ArrowUp"){
@@ -110,24 +110,24 @@
 				}
 			}
 			function keyRightHandler(e){
-				if(e.key=="Right"||e.key=="ArrowRight"){
+				if(e.key=="Right"||e.key=="ArrowRight"||e.keyCode==68){
 					that.car.moveRight();
 					/*that.movement.right=true;*/
 				}
 			}
 			function keyRightUpHandler(e){
-				if(e.key=="Right"||e.key=="ArrowRight"){
+				if(e.key=="Right"||e.key=="ArrowRight"||e.keyCode==68){
 					that.movement.right=false;
 				}
 			}
 			function keyLeftHandler(e){
-				if(e.key=="Left"||e.key=="ArrowLeft"){
+				if(e.key=="Left"||e.key=="ArrowLeft"||e.keyCode==65){
 					/*that.movement.left=true;*/
 					that.car.moveLeft();
 				}
 			}
 			function keyLeftUpHandler(e){
-				if(e.key=="Left"||e.key=="ArrowLeft"){
+				if(e.key=="Left"||e.key=="ArrowLeft"||e.keyCode==65){
 					that.movement.left=false;
 				}
 			}
@@ -315,7 +315,7 @@
 				   ball.x + ball.width > this.x &&
 				   ball.y < this.y + this.wallHeight &&
 				   ball.y + ball.height > this.y && this.isActive){
-						this.ctx.drawImage(this.vehicleImage,140,0,110,275,this.x,this.y,this.wallWidth,this.wallHeight+20);
+						this.ctx.drawImage(this.vehicleImage,98,0,50,100,this.x,this.y,this.wallWidth,this.wallHeight+20);
 						return false;
 					}
 					else{
@@ -327,7 +327,7 @@
 				   ball.x + ball.width > this.x &&
 				   ball.y < this.y + this.wallHeight &&
 				   ball.y + ball.height > this.y && this.isActive){
-						this.ctx.drawImage(this.vehicleImage,225,0,180,475,this.x,this.y,this.wallWidth,this.wallHeight+20);
+						this.ctx.drawImage(this.vehicleImage,98,0,50,100,this.x,this.y,this.wallWidth,this.wallHeight+20);
 						return false;
 					}
 					else{
